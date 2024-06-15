@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY package.json ./
 
-RUN yarn config set registry https://registry.npmmirror.com
+# RUN yarn config set registry https://registry.npmmirror.com
 
 RUN yarn
 
