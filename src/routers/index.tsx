@@ -1,7 +1,13 @@
 import {
+  BarChartOutlined,
+  BarsOutlined,
+  CodeOutlined,
   CrownOutlined,
+  DashboardOutlined,
   HomeOutlined,
   InsertRowBelowOutlined,
+  PlayCircleOutlined,
+  RocketOutlined,
   SwitcherOutlined,
   TableOutlined,
 } from "@ant-design/icons";
@@ -18,6 +24,8 @@ const KeepComp = lazy(() => import("@/pages/KeepComp"));
 const Test = lazy(() => import("@/pages/Test"));
 const DynamicRoute = lazy(() => import("@/pages/DynamicRoute"));
 const NotFound = lazy(() => import("@/pages/404"));
+const Project = lazy(() => import("@/pages/Project"));
+const ProjectDetail = lazy(() => import("@/pages/Project/ProjectDetail"));
 
 type MetaMenu = {
   name?: string;
@@ -45,6 +53,78 @@ export const layoutRouters: MetaMenuAuthRouteObject[] = [
         name: "首页",
         element: <Home />,
         icon: <HomeOutlined />,
+      },
+      {
+        path: "/dashboard",
+        name: "工作台",
+        icon: <DashboardOutlined />,
+        children: [
+          {
+            path: "/dashboard/mine",
+            element: <div>我的</div>,
+            name: "我的",
+          },
+          {
+            path: "/dashboard/statistics",
+            element: <div>数据统计</div>,
+            name: "数据统计",
+          },
+        ],
+      },
+      {
+        path: "/config",
+        name: "配置管理",
+        icon: <BarChartOutlined />,
+        children: [
+          {
+            path: "/config/project",
+            name: "项目配置",
+            element: <Project />,
+          },
+          {
+            path: "/config/project/:projectId",
+            name: "项目详情",
+            element: <ProjectDetail />,
+            hideMenu: true,
+          },
+        ],
+      },
+      {
+        path: "/apitest",
+        name: "接口测试",
+        icon: <RocketOutlined />,
+        children: [
+          {
+            path: "/apitest/envs",
+            name: "环境配置",
+            icon: <BarChartOutlined />,
+            element: <div>环境</div>,
+          },
+          {
+            path: "/apitest/testcase",
+            name: "测试用例",
+            element: <div>测试用例</div>,
+            icon: <BarsOutlined />,
+          },
+          {
+            path: "/apitest/testcase/:caseId",
+            name: "用例详情",
+            element: <div>用例详情</div>,
+            hideMenu: true,
+          },
+          {
+            path: "/apitest/script",
+            name: "公共脚本",
+            element: <div>公共脚本</div>,
+            icon: <CodeOutlined />,
+          },
+          {
+            path: "/apitest/plan",
+            name: "测试计划",
+            element: <div>测试计划</div>,
+            icon: <PlayCircleOutlined />,
+          },
+        ],
       },
       {
         path: "/access",
