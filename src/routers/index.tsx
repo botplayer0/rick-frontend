@@ -26,6 +26,7 @@ const DynamicRoute = lazy(() => import("@/pages/DynamicRoute"));
 const NotFound = lazy(() => import("@/pages/404"));
 const Project = lazy(() => import("@/pages/Project"));
 const ProjectDetail = lazy(() => import("@/pages/Project/ProjectDetail"));
+const PastePage = lazy(() => import("@/pages/Paste"));
 
 type MetaMenu = {
   name?: string;
@@ -123,6 +124,18 @@ export const layoutRouters: MetaMenuAuthRouteObject[] = [
             name: "测试计划",
             element: <div>测试计划</div>,
             icon: <PlayCircleOutlined />,
+          },
+        ],
+      },
+      {
+        path: "/tools",
+        name: "工具",
+        icon: <BarChartOutlined />,
+        children: [
+          {
+            path: "/tools/share",
+            name: "文本分享",
+            element: <PastePage />,
           },
         ],
       },

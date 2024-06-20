@@ -1,3 +1,4 @@
+import ace from "ace-builds/src-noconflict/ace";
 import { useTitle } from "ahooks";
 import { Suspense, useEffect, useState } from "react";
 import { useLocation, useNavigate, useRoutes } from "react-router-dom";
@@ -39,6 +40,12 @@ const App: React.FC = () => {
     }
     setLoding(false);
   }, [pathname]);
+
+  useEffect(() => {
+    ace.config.loadModule("ace/ext/language_tools", () => {
+      ace.require("ace/ext/language_tools");
+    });
+  }, []);
 
   return (
     <Suspense fallback={<LazyLoading />}>
