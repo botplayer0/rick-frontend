@@ -1,19 +1,9 @@
-import EditorJsonForm from "@/components/CodeEditor/EditorJsonForm";
-import EditorPythonForm from "@/components/CodeEditor/EditorPythonForm";
 import usePasteStore from "@/stores/paste/paste.store";
 import { formatTimestamp } from "@/utils/formatTime";
-import {
-  DatePicker,
-  Form,
-  Input,
-  Select,
-  Space,
-  Table,
-  TableProps,
-} from "antd";
+import { Button, Card, Space, Table, TableProps } from "antd";
 import { useForm } from "antd/es/form/Form";
-import dayjs from "dayjs";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import PasteModal from "./components/PasteModal";
 
 interface DataType {
   paste_id: number;
@@ -22,93 +12,84 @@ interface DataType {
   create_user: number;
 }
 
-const columns: TableProps<DataType>["columns"] = [
-  {
-    title: "ID",
-    dataIndex: "paste_id",
-    key: "paste_id",
-  },
-  {
-    title: "标题",
-    dataIndex: "title",
-    key: "title",
-  },
-  {
-    title: "过期时间",
-    dataIndex: "expired",
-    key: "expired",
-    render: (text) => <div>{formatTimestamp(text)}</div>,
-  },
-  {
-    title: "创建人",
-    dataIndex: "create_user",
-    key: "create_user",
-    render: (text) => <div>{text}</div>,
-  },
-  {
-    title: "操作",
-    key: "action",
-    render: (_, record) => (
-      <Space size="middle">
-        <a>详情</a>
-        <a>删除</a>
-      </Space>
-    ),
-  },
-];
-
 const PastePage: React.FC = () => {
   const { pasteList, refreshPasteList } = usePasteStore();
   const [form] = useForm();
-  const contentType = Form.useWatch("content_type", form);
+  const [pasteModalOpen, setPasteModalOpen] = useState<boolean>(false);
+  const [pasteId, setPasteId] = useState<number>(null);
+
+  const openPasteModal = (pasteId?: number) => {
+    if (pasteId) {
+      setPasteId(pasteId);
+      setPasteModalOpen(true);
+    } else {
+      setPasteId(null);
+      setPasteModalOpen(true);
+    }
+  };
 
   useEffect(() => {
     if (pasteList === null) {
       refreshPasteList(1, 20);
     }
-  }, pasteList);
+  }, []);
+
+  const columns: TableProps<DataType>["columns"] = [
+    {
+      title: "ID",
+      dataIndex: "paste_id",
+      key: "paste_id",
+    },
+    {
+      title: "标题",
+      dataIndex: "title",
+      key: "title",
+    },
+    {
+      title: "过期时间",
+      dataIndex: "expired",
+      key: "expired",
+      render: (text) => <div>{formatTimestamp(text)}</div>,
+    },
+    {
+      title: "创建人",
+      dataIndex: "create_user",
+      key: "create_user",
+      render: (text) => <div>{text}</div>,
+    },
+    {
+      title: "操作",
+      key: "action",
+      render: (_, record) => (
+        <Space size="middle">
+          <a onClick={() => openPasteModal(record.paste_id)}>详情</a>
+          <a>删除</a>
+        </Space>
+      ),
+    },
+  ];
 
   return (
-    <div>
-      {JSON.stringify(pasteList)}
+    <Card>
+      <div style={{ marginBottom: 8 }}>
+        <Button type="primary" onClick={() => openPasteModal()}>
+          新建
+        </Button>
+      </div>
+
       <Table
         columns={columns}
         dataSource={pasteList}
         bordered
-        style={{ width: "70%" }}
+        style={{ width: "90%" }}
       />
-      <Form form={form}>
-        <Form.Item label="标题" name="title">
-          <Input />
-        </Form.Item>
-        <Form.Item label="有效时间" name="expired">
-          <DatePicker
-            showTime
-            presets={[
-              { label: "一天后", value: dayjs().add(1, "d") },
-              { label: "一个小时后", value: dayjs().add(1, "h") },
-              { label: "永远", value: dayjs().add(10, "year") },
-            ]}
-          />
-        </Form.Item>
-        <Form.Item label="数据类型" name="content_type" initialValue={"3"}>
-          <Select>
-            <Select.Option value="1">代码</Select.Option>
-            <Select.Option value="2">JSON</Select.Option>
-            <Select.Option value="3">文本</Select.Option>
-          </Select>
-        </Form.Item>
-        <Form.Item label="内容" name="content">
-          {/* <EditorJsonForms contorl={form} /> */}
-          {/* <EditorPythonForm control={form} /> */}
-          {contentType === "1" && <EditorPythonForm control={form} />}
-          {contentType === "2" && (
-            <EditorJsonForm contorl={form} keyName="content" />
-          )}
-          {contentType === "3" && <div>3</div>}
-        </Form.Item>
-      </Form>
-    </div>
+      {JSON.stringify(pasteList)}
+      <PasteModal
+        open={pasteModalOpen}
+        setOpen={setPasteModalOpen}
+        pasteId={pasteId}
+      />
+    </Card>
   );
 };
 

@@ -1,3 +1,5 @@
+import dayjs from "dayjs"
+
 export enum ContentTypeEnum {
   CODE = 1,
   JSON = 2,
@@ -44,3 +46,9 @@ export interface ResponsePasteDetail {
   updated_at: number
 }
 
+export interface PasteDetailFormProps {
+  title: string
+  expired: dayjs.Dayjs
+  content: string
+  content_type: string
+}

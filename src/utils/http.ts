@@ -139,7 +139,7 @@ class HttpClient {
 
 }
 
-const http = new HttpClient("http://127.0.0.1:9000/")
+const http = new HttpClient("http://192.168.6.128:9000/")
 
 const waitTime = (time: number = 100) => {
   return new Promise((resolve) => {
