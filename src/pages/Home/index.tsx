@@ -1,7 +1,8 @@
-import useMemoKeepAliveScroll from '@/hooks/useMemoKeepAliveScroll';
-import { Button, Card, Divider, Space } from 'antd';
-import React, { useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import useMemoKeepAliveScroll from "@/hooks/useMemoKeepAliveScroll";
+import { Button, Card, Divider, Space } from "antd";
+import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import StatusCard from "./components/StatusCard";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -13,18 +14,26 @@ const Home: React.FC = () => {
 
   return (
     <div ref={domRef}>
+      <Card styles={{ body: { padding: 0 } }}>
+        <StatusCard />
+      </Card>
       <Card title="测试不显示在菜单的路由">
-        <Button type="primary" onClick={() => navigate('/test/t2')}>
+        <Button type="primary" onClick={() => navigate("/test/t2")}>
           跳转至菜单隐藏页面
         </Button>
       </Card>
       <Divider />
       <Card title="测试跳转动态路由页面">
         <Space>
-          <Button onClick={() => setRandomNum(Math.floor(Math.random() * (1000 + 1)))}>
+          <Button
+            onClick={() => setRandomNum(Math.floor(Math.random() * (1000 + 1)))}
+          >
             生成随机参数id：
           </Button>
-          <Button type="primary" onClick={() => navigate(`/dynamic-router/${randomNum}`)}>
+          <Button
+            type="primary"
+            onClick={() => navigate(`/dynamic-router/${randomNum}`)}
+          >
             跳转至动态路由
           </Button>
         </Space>
