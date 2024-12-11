@@ -1,4 +1,5 @@
 import { apiLogin } from "@/apis/auth/auth";
+import { RequestAuthRegister } from "@/apis/auth/auth.type";
 import { message } from "@/hooks/useAppStatic";
 import useAuthStore from "@/stores/auth/auth.store";
 import { Button, Checkbox, Form, Input } from "antd";
@@ -23,7 +24,7 @@ export default () => {
     }
   };
   return (
-    <Form
+    <Form<RequestAuthRegister>
       name="login-form"
       initialValues={{ remember: true }}
       onFinish={onFinish}

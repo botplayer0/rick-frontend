@@ -99,10 +99,10 @@ class HttpClient {
       //   message.error("刷新Token失败, 请重新登录")
       // }
     } else if (error.response && error.response.status === 400) {
-      message.error(error.response.data.error_msg || error.message || "请求出错了")
+      message.error(error.response.data.err_msg || error.message || "请求出错了")
       return error.response
     } else {
-      message.error(error.response.data.error_msg || error.message || "请求出错了")
+      message.error(error.response.data.err_msg || error.message || "请求出错了")
     }
     // 抛出axios_error
     throw error;
@@ -139,7 +139,7 @@ class HttpClient {
 
 }
 
-const http = new HttpClient("http://117.72.47.57:9000/")
+const http = new HttpClient("http://127.0.0.1:9000/")
 
 const waitTime = (time: number = 100) => {
   return new Promise((resolve) => {

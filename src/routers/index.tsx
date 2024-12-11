@@ -1,3 +1,4 @@
+import UserCenter from "@/pages/UserCenter";
 import {
   BarChartOutlined,
   BarsOutlined,
@@ -170,6 +171,18 @@ export const layoutRouters: MetaMenuAuthRouteObject[] = [
         path: "/dynamic-router/:id",
         name: "动态路由",
         element: <DynamicRoute />,
+        hideMenu: true,
+      },
+      {
+        path: "/usercenter",
+        name: "个人中心",
+        element: <UserCenter />,
+        hideMenu: true,
+      },
+      {
+        path: "/admin",
+        name: "管理中心",
+        element: <div>管理中心</div>,
         hideMenu: true,
       },
     ],

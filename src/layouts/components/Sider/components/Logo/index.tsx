@@ -1,7 +1,7 @@
-import useAllStores from '@/stores';
-import { Link } from 'react-router-dom';
-import { shallow } from 'zustand/shallow';
-import useLogoStyles from './styles';
+import useAllStores from "@/stores";
+import { Link } from "react-router-dom";
+import { shallow } from "zustand/shallow";
+import useLogoStyles from "./styles";
 
 const LayoutLogo: React.FC = () => {
   const { menuTheme, themeMode, collapsed } = useAllStores(
@@ -10,7 +10,7 @@ const LayoutLogo: React.FC = () => {
       themeMode: state.themeMode,
       collapsed: state.collapsed,
     }),
-    shallow,
+    shallow
   );
   const { styles } = useLogoStyles({ menuTheme, themeMode });
 
@@ -23,7 +23,7 @@ const LayoutLogo: React.FC = () => {
           src="https://img.alicdn.com/tfs/TB1YHEpwUT1gK0jSZFhXXaAtVXa-28-27.svg"
           alt="logo"
         />
-        {collapsed ? null : <h1>{import.meta.env.VITE_APP_TITLE}</h1>}
+        {collapsed ? null : <h1>{"Rick Frontend"}</h1>}
       </Link>
     </div>
   );
