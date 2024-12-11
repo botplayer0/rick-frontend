@@ -1,6 +1,7 @@
 import { useTitle } from "ahooks";
 import { Suspense, useEffect, useState } from "react";
 import { useLocation, useNavigate, useRoutes } from "react-router-dom";
+import { apiHealthCheck } from "./apis/auth/auth";
 import LazyLoading from "./components/LazyLoading";
 import { LOGIN_PATH } from "./constants";
 import useAppTips from "./hooks/useAppStatic";
@@ -39,6 +40,16 @@ const App: React.FC = () => {
     }
     setLoding(false);
   }, [pathname]);
+
+  useEffect(() => {
+    console.log("页面首次访问?");
+    // 检查登录状态
+    const fetchHealth = async () => {
+      const response = await apiHealthCheck();
+      console.log(response);
+    };
+    fetchHealth();
+  }, []);
 
   return (
     <Suspense fallback={<LazyLoading />}>

@@ -59,6 +59,7 @@ export const layoutRouters: MetaMenuAuthRouteObject[] = [
         path: "/dashboard",
         name: "工作台",
         icon: <DashboardOutlined />,
+        element: <Navigate to="/dashboard/mine" />,
         children: [
           {
             path: "/dashboard/mine",
@@ -76,6 +77,7 @@ export const layoutRouters: MetaMenuAuthRouteObject[] = [
         path: "/config",
         name: "配置管理",
         icon: <BarChartOutlined />,
+        element: <Navigate to="/config/project" />,
         children: [
           {
             path: "/config/project",
@@ -94,6 +96,7 @@ export const layoutRouters: MetaMenuAuthRouteObject[] = [
         path: "/apitest",
         name: "接口测试",
         icon: <RocketOutlined />,
+        element: <Navigate to="/apitest/envs" />,
         children: [
           {
             path: "/apitest/envs",

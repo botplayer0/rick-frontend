@@ -79,7 +79,7 @@ class HttpClient {
     }
     // 处理状态码==400
     else if (error.response && error.response.status === 401) {
-      message.error(`Token已失效`)
+      message.error(error.response.data.error_msg || error.message || "Token已失效")
       // if (!this.hasRefrshedToken) {
       //   this.hasRefrshedToken = true
       //   try {
@@ -99,10 +99,10 @@ class HttpClient {
       //   message.error("刷新Token失败, 请重新登录")
       // }
     } else if (error.response && error.response.status === 400) {
-      message.error(error.response.data.err_msg || error.message || "请求出错了")
+      message.error(error.response.data.error_msg || error.message || "请求出错了")
       return error.response
     } else {
-      message.error(error.response.data.err_msg || error.message || "请求出错了")
+      message.error(error.response.data.error_msg || error.message || "请求出错了")
     }
     // 抛出axios_error
     throw error;

@@ -1,6 +1,11 @@
 import http, { IResponse } from "../../utils/http";
 import type { RequestAuthLogin, RequestAuthRegister, ResponseAuthLogin } from "./auth.type";
 
+export const apiHealthCheck = async () => {
+  const response = await http.get<IResponse>("/auth/health")
+  return response
+}
+
 
 export const apiRegister = async (data: RequestAuthRegister) => {
   const response = await http.post<IResponse>('/auth/register', data)
