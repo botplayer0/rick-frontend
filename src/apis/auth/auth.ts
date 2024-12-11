@@ -18,7 +18,7 @@ export const apiLogin = async (data: RequestAuthLogin) => {
 }
 
 export const apiRefreshLogin = async (token: string) => {
-  const response = await http.post<ResponseAuthLogin>("/auth/refresh", null, {
+  const response = await http.post<ResponseAuthLogin>("/auth/refresh_token", null, {
     headers: {
       Authorization: token
     }

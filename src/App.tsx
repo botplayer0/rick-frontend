@@ -3,7 +3,6 @@ import { Suspense, useEffect, useState } from "react";
 import { useLocation, useNavigate, useRoutes } from "react-router-dom";
 import { apiHealthCheck } from "./apis/auth/auth";
 import LazyLoading from "./components/LazyLoading";
-import { LOGIN_PATH } from "./constants";
 import useAppTips from "./hooks/useAppStatic";
 import { useMatchTitle } from "./hooks/useLayout";
 import NotAuth from "./pages/403";
@@ -34,10 +33,10 @@ const App: React.FC = () => {
 
   //
   useEffect(() => {
-    //  无 token 访问时，访问这两个页面无需认证，其余跳转
-    if (!userInfo && !userInfo?.token) {
-      return navigate(LOGIN_PATH, { replace: true });
-    }
+    //  无 userInfo或者Token时, 跳转登录页
+    // if ((userInfo && Object.keys(userInfo).length === 0) || !userInfo?.token) {
+    //   return navigate(LOGIN_PATH, { replace: true });
+    // }
     setLoding(false);
   }, [pathname]);
 
@@ -48,7 +47,9 @@ const App: React.FC = () => {
       const response = await apiHealthCheck();
       console.log(response);
     };
-    fetchHealth();
+    if (pathname !== "/login") {
+      fetchHealth();
+    }
   }, []);
 
   return (

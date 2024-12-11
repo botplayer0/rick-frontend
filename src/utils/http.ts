@@ -55,7 +55,7 @@ class HttpClient {
   private handleRequest = (config: InternalAxiosRequestConfig<AxiosRequestConfig>): InternalAxiosRequestConfig<AxiosRequestConfig> => {
     // 当登录或者注册时, header中无需 Authorization
     if (!config.url?.match(/\/(login|register)$/)) {
-      const token = useAuthStore.getState().userInfo.token || 'null'
+      const token = useAuthStore.getState().userInfo?.token || 'null'
       if (token) {
         config.headers.Authorization = `${token}`
       }
@@ -80,24 +80,23 @@ class HttpClient {
     // 处理状态码==400
     else if (error.response && error.response.status === 401) {
       message.error(error.response.data.error_msg || error.message || "Token已失效")
-      // if (!this.hasRefrshedToken) {
-      //   this.hasRefrshedToken = true
-      //   try {
-      //     const { data } = await this.instance.post<IResponse>("/auth/refresh")
-      //     console.log(data)
-      //     message.success("刷新Token成功~")
-      //   } catch (err) {
-      //     console.log(err)
-      //     window.localStorage.removeItem("userInfo")
-      //     this.history.push("/login")
-      //     message.error("刷新Token失败, 请重新登录")
-      //     throw err
-      //   }
-      // } else {
-      //   window.localStorage.removeItem("userInfo")
-      //   this.history.push("/login")
-      //   message.error("刷新Token失败, 请重新登录")
-      // }
+      console.log("这里打印了error")
+      if (!this.hasRefrshedToken) {
+        this.hasRefrshedToken = true
+        try {
+          const response = await this.instance.post<IResponse>("/auth/refresh_token")
+          useAuthStore.getState().setUserInfo(response.data.data)
+          message.success("刷新Token成功~")
+        } catch (err) {
+          console.log(err)
+          window.localStorage.removeItem("userInfo")
+          window.location.href = "/login";
+          throw err
+        }
+      } else {
+        window.localStorage.removeItem("userInfo")
+        window.location.href = "/login";
+      }
     } else if (error.response && error.response.status === 400) {
       message.error(error.response.data.error_msg || error.message || "请求出错了")
       return error.response
