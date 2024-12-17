@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { ResponseAuthLogin } from "@/apis/auth/auth.type";
+import { userInfo } from "os";
 
 // interface UserInfo extends Omit<ResponseAuthLogin, 'exp' | 'token'> { }
 // interface TokenInfo { token: string, exp: number }
@@ -11,7 +12,8 @@ interface IStoreProps {
   setUserInfo: (info: ResponseAuthLogin) => void;
   currentUserId: number;
   setCurrentUserId: (id: number) => void;
-  getToken: () => string
+  getToken: () => string;
+  cleanUserInfo: () => void
 
 }
 
@@ -22,6 +24,7 @@ const useAuthStore = create<IStoreProps>()(
       currentUserId: null,
       setUserInfo: (info) => set(() => ({ userInfo: info })),
       setCurrentUserId: (userId) => set(() => ({ currentUserId: userId })),
+      cleanUserInfo: () => set(() => ({ userInfo: null, currentUserId: null })),
       getToken: () => get().userInfo?.token || ''
     }),
     {

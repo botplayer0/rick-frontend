@@ -35,7 +35,7 @@ const PersonCenter: React.FC = () => {
       label: "超级管理",
       key: MenuItemKey.ADMIN,
       icon: <SettingOutlined />,
-      disabled: userInfo.role === 2 ? false : true,
+      disabled: userInfo?.role === 2 ? false : true,
     },
     { type: "divider" },
     {

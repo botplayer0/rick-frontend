@@ -18,8 +18,6 @@ interface ISuccessResponse {
   code: 0
 }
 
-
-
 class HttpClient {
   private readonly instance: AxiosInstance;
   private readonly history = createBrowserHistory();;
@@ -73,14 +71,11 @@ class HttpClient {
   }
 
   private handleError = async (error: any): Promise<any> => {
-    console.log("here", error)
     if (error.code === "ERR_NETWORK") {
       message.error(`网络异常`)
     }
     // 处理状态码==400
     else if (error.response && error.response.status === 401) {
-      message.error(error.response.data.error_msg || error.message || "Token已失效")
-      console.log("这里打印了error")
       if (!this.hasRefrshedToken) {
         this.hasRefrshedToken = true
         try {
@@ -88,14 +83,13 @@ class HttpClient {
           useAuthStore.getState().setUserInfo(response.data.data)
           message.success("刷新Token成功~")
         } catch (err) {
-          console.log(err)
-          window.localStorage.removeItem("userInfo")
-          window.location.href = "/login";
+          useAuthStore.getState().cleanUserInfo()
+          message.error("刷新Token失败~请重新登录")
           throw err
         }
       } else {
-        window.localStorage.removeItem("userInfo")
-        window.location.href = "/login";
+        message.error(error.response.data.error_msg || error.message || "Token已失效")
+        useAuthStore.getState().cleanUserInfo()
       }
     } else if (error.response && error.response.status === 400) {
       message.error(error.response.data.error_msg || error.message || "请求出错了")

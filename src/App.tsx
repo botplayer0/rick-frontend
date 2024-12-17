@@ -16,6 +16,7 @@ const App: React.FC = () => {
   const { userInfo } = useAuthStore();
   const [authRoutes, setAuthRouters] = useState<AuthRouteObject[]>([]);
   const [loading, setLoding] = useState<boolean>(true);
+  const [firstHealthCheck, setFirstHealthCheck] = useState<boolean>(false);
   useAppTips();
   useTitle(useMatchTitle(pathname));
 
@@ -31,26 +32,28 @@ const App: React.FC = () => {
     setAuthRouters(_routers);
   }, [loading]);
 
-  //
   useEffect(() => {
-    //  无 userInfo或者Token时, 跳转登录页
-    // if ((userInfo && Object.keys(userInfo).length === 0) || !userInfo?.token) {
-    //   return navigate(LOGIN_PATH, { replace: true });
-    // }
-    setLoding(false);
-  }, [pathname]);
-
-  useEffect(() => {
-    console.log("页面首次访问?");
-    // 检查登录状态
+    // Token健康检查
     const fetchHealth = async () => {
       const response = await apiHealthCheck();
-      console.log(response);
+      setFirstHealthCheck(true);
     };
     if (pathname !== "/login") {
-      fetchHealth();
+      if (!firstHealthCheck) {
+        fetchHealth();
+      }
+    } else {
+      // userInfo检查, 在http.ts中, 如果401尝试刷新token, 失败清理userInfo触发UseEffect
+      if (
+        !userInfo ||
+        (userInfo && Object.keys(userInfo).length === 0) ||
+        !userInfo?.token
+      ) {
+        return navigate("/login", { replace: true });
+      }
     }
-  }, []);
+    setLoding(false);
+  }, [userInfo, pathname]);
 
   return (
     <Suspense fallback={<LazyLoading />}>
